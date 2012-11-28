@@ -1,15 +1,21 @@
-/* The control lines for the first mux */
+// The control lines for the first mux 
 int RA = 2;
 int RB = 3;
 int RC = 4;
-/* and the other one */
-int CA = 5;
+// and the other one 
+// Notice these are flipped, for cosmetic reasons on the hardware.
+// I wanted the colors to line up nicely :)
+int CC = 5;
 int CB = 6;
-int CC = 7;
-/* and that one control line */
+int CA = 7;
+// and that one control line 
 int EN = 8;
-/* Okay, and the LED too */
+// Okay, and the LED too 
 int LED = 13;
+
+// here are some function prototypes 
+void touch(int row, int col);
+void mash();
 
 void setup(){
  // Turn the LED on to show that setup is happening
@@ -44,7 +50,7 @@ void loop(){
   
 }
 
-touch(int row, int col){
+void touch(int row, int col){
   
   // Use a bitmask to check the "ones" bit
   // and then write it to the mux
@@ -60,11 +66,11 @@ touch(int row, int col){
   
   // Same as the above block but for the other mux
   // so go read it there. 
-  w = in & B001;
+  w = col & B001;
   digitalWrite(CA, w);
-  w = (in & B010) >> 1;
+  w = (col & B010) >> 1;
   digitalWrite(CB, w);
-  w = (in B B100) >> 2;
+  w = (col & B100) >> 2;
   digitalWrite(CC, w);
   
   // Pull the enable pin low to make the connection
@@ -80,20 +86,27 @@ touch(int row, int col){
   digitalWrite(LED, LOW);
 }
 
-mash(){
+void mash(){
  // This loops through every combo of keypresses
  // and presses them, "mashing" on the keyboard
+ // It doesn't step through the loop until you 
+ // send a character over serial as a trigger.
  int r;
  int c;
  for(r = 0; r < 8; r++){
   for(c = 0; c < 8; c++){
+    // here's where we wait for serial data 
+    Serial.flush();
+    while(!Serial.available());
+    // And now we actually make the connection 
+    // and print a little verification
     touch(r, c);
     Serial.println("r ");
     Serial.print(r);
     Serial.print("   c ");
     Serial.print(c);
     
-    // Wait a second so you can see what's happening 
+    // Wait a bit so you don't send too many presses 
     delay(1000);
   }
  } 
