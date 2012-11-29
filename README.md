@@ -3,6 +3,10 @@ Keymash
 
 Creating a teleterminal using a typewriter and an Arduino. Work in progress.
 
+See <www.scotttherobot.com/?p=685> for more, including photographs. Eventually
+there will be a full writeup.
+
+
 How It Works
 ------------
 A set of multiplexers are connected to the column and row lines of the typewriter's
