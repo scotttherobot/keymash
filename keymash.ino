@@ -16,6 +16,7 @@ int LED = 13;
 // here are some function prototypes 
 void touch(int row, int col);
 void mash();
+void printc(char c);
 
 /////////////////////
 // Keymap
@@ -25,9 +26,9 @@ typedef struct{
   char c;
   int row;
   int col;
-}Word;
+}Letter;
 
-Word keys[64];
+Letter let[64];
 
 
 
@@ -38,6 +39,70 @@ Word keys[64];
 ///////////////////
 
 void setup(){
+  /// keymap
+  let[0] = (Letter) {'.', 0, 0}; //
+  let[1] = (Letter) {'y', 0, 1}; //
+  //let[2] = (Letter) {'', 0, 2}; //BACKSPACE
+  let[3] = (Letter) {'n', 0, 3}; //
+  let[4] = (Letter) {'j', 0, 4}; //
+  let[5] = (Letter) {'h', 0, 5}; //
+  let[6] = (Letter) {'6', 0, 6}; //
+  //let[7] = (Letter) {'', 0, 7}; // CORRECT
+  
+  let[8] = (Letter) {',', 1, 0}; //
+  let[9] = (Letter) {'t', 1, 1}; //
+  let[10] = (Letter) {'=', 1, 2}; //
+  let[11] = (Letter) {'b', 1, 3}; //
+  let[12] = (Letter) {'|', 1, 4}; // RETURN
+  let[13] = (Letter) {'g', 1, 5}; //
+  let[14] = (Letter) {'5', 1, 6}; //
+  //let[15] = (Letter) {'', 1, 7}; // WORDERASE
+
+  let[16] = (Letter) {'m', 2, 0}; //
+  let[17] = (Letter) {'r', 2, 1}; //
+  let[18] = (Letter) {'-', 2, 2}; //
+  let[19] = (Letter) {'v', 2, 3}; //
+  let[20] = (Letter) {'½', 2, 4}; // 
+  let[21] = (Letter) {'f', 2, 5}; //
+  let[22] = (Letter) {'4', 2, 6}; //
+  let[23] = (Letter) {' ', 2, 7}; // SPACE
+  
+  let[24] = (Letter) {'\'', 3, 0}; //
+  let[25] = (Letter) {'e', 3, 1}; //
+  let[26] = (Letter) {'0', 3, 2}; //
+  let[27] = (Letter) {'c', 3, 3}; //
+  let[28] = (Letter) {'p', 3, 4}; // 
+  let[29] = (Letter) {'d', 3, 5}; //
+  let[30] = (Letter) {'3', 3, 6}; //
+  //let[31] = (Letter) {' ', 3, 7}; // BEEP
+  
+  let[32] = (Letter) {';', 4, 0}; //
+  let[33] = (Letter) {'w', 4, 1}; //
+  let[34] = (Letter) {'9', 4, 2}; //
+  let[35] = (Letter) {'x', 4, 3}; //
+  let[36] = (Letter) {'o', 4, 4}; // 
+  let[37] = (Letter) {'s', 4, 5}; //
+  let[38] = (Letter) {'2', 4, 6}; //
+  //let[39] = (Letter) {'!', 4, 7}; // no actuon
+  
+  let[40] = (Letter) {'l', 5, 0}; //
+  let[41] = (Letter) {'q', 5, 1}; //
+  let[42] = (Letter) {'8', 5, 2}; //
+  let[43] = (Letter) {'z', 5, 3}; //
+  let[44] = (Letter) {'i', 5, 4}; // 
+  let[45] = (Letter) {'a', 5, 5}; //
+  let[46] = (Letter) {'1', 5, 6}; //
+  let[47] = (Letter) {'/', 5, 7}; //
+  
+  let[48] = (Letter) {'k', 6, 0}; //
+  //let[49] = (Letter) {'', 6, 1}; // END OF LINE
+  let[50] = (Letter) {'7', 6, 2}; //
+  //let[51] = (Letter) {'@', 6, 3}; //NO ACTUON
+  let[52] = (Letter) {'u', 6, 4}; // 
+  let[53] = (Letter) {'~', 6, 5}; //CAPS LOCK
+  //let[54] = (Letter) {'1', 6, 6}; // BEEP
+  //let[55] = (Letter) {'$', 6, 7}; // SHIFT
+  
  // Turn the LED on to show that setup is happening
  pinMode(LED, OUTPUT);
  digitalWrite(LED, LOW);
@@ -58,16 +123,122 @@ void setup(){
  pinMode(CC, OUTPUT);
  // turn the LED off to signal that everything's good.
  digitalWrite(LED, LOW);
+ touch(0,0);
  
- Serial.println("System ready. Starting 10 second delay.");
+ Serial.println("System ready. Starting 5 second delay.");
  // Wait for some time and then mash the keys, for testing.
- delay(10000);
- Serial.println("Starting mash(). Type a character to increment the row/col.");
- mash();
+ delay(5000);
+ Serial.println("Type a letter.");
+
 }
 
 void loop(){
+//  mash();
+char c;
+while(!Serial.available()){
+}
+c = Serial.read();
+Serial.print(c);
+printc(c);
+}
 
+void printc(char c){
+  if(c>64 && c<91){
+     printc('~');
+     printc(c + 32);
+     printc('~');
+  }
+  else{
+    switch(c){
+      case ':':
+        printc('~');
+        printc(';');
+        printc('~');
+        break;
+      case '"':
+        printc('~');
+        printc('\'');
+        printc('~');
+        break;
+      case '?':
+        printc('~');
+        printc('/');
+        printc('~');
+        break;
+      case '+':
+        printc('~');
+        printc('=');
+        printc('~');
+        break;
+      case '_':
+        printc('~');
+        printc('-');
+        printc('~');
+        break;
+      case ')':
+        printc('~');
+        printc('0');
+        printc('~');
+        break;
+      case '(':
+        printc('~');
+        printc('9');
+        printc('~');
+        break;
+      case '*':
+        printc('~');
+        printc('8');
+        printc('~');
+        break;
+      case '&':
+        printc('~');
+        printc('7');
+        printc('~');
+        break;
+      case '^':
+        printc('~');
+        printc('6');
+        printc('~');
+        break;
+      case '%':
+        printc('~');
+        printc('5');
+        printc('~');
+        break;
+      case '$':
+        printc('~');
+        printc('4');
+        printc('~');
+        break;
+      case '#':
+        printc('~');
+        printc('3');
+        printc('~');
+        break;
+      case '@':
+        printc('~');
+        printc('2');
+        printc('~');
+        break;
+      case '!':
+        printc('~');
+        printc('1');
+        printc('~');
+        break;
+      default:
+        int i;
+        for(i=0; i < 64; i++){
+         if(let[i].c == c){
+          touch(let[i].row, let[i].col);
+          break;
+         } 
+        }
+  }
+      
+  }
+  
+  
+  
   
 }
 
@@ -112,6 +283,8 @@ void touch(int row, int col){
   // and turn the LED off because we're donezo
   digitalWrite(EN, HIGH);
   digitalWrite(LED, LOW);
+  
+  delay(20); // unpress for 20ms
 }
 
 void mash(){
@@ -137,7 +310,7 @@ void mash(){
     Serial.print(c);
     Serial.print("\n");
     // Wait a bit so you don't send too many presses 
-    delay(1000);
+    delay(10);
   }
  } 
   
