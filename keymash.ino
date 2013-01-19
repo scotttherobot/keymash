@@ -108,7 +108,7 @@ void setup(){
  digitalWrite(LED, LOW);
  // Setup the serial port to echo row/col as we mash
  // (get some serial up in here, up in here)
- Serial.begin(57600); 
+ Serial.begin(1200); 
  // and pull the enable pin high
  // to inhibit connections
  pinMode(EN, OUTPUT);
@@ -125,10 +125,8 @@ void setup(){
  digitalWrite(LED, LOW);
  touch(0,0);
  
- Serial.println("System ready. Starting 5 second delay.");
- // Wait for some time and then mash the keys, for testing.
- delay(5000);
- Serial.println("Type a letter.");
+ Serial.println("System ready.\n");
+
 
 }
 
@@ -138,7 +136,6 @@ char c;
 while(!Serial.available()){
 }
 c = Serial.read();
-Serial.print(c);
 printc(c);
 }
 
@@ -230,6 +227,7 @@ void printc(char c){
         for(i=0; i < 64; i++){
          if(let[i].c == c){
           touch(let[i].row, let[i].col);
+          serial.print('G');
           break;
          } 
         }
@@ -248,29 +246,29 @@ void touch(int row, int col){
   // and then write it to the mux
   int w = row & B001;
   digitalWrite(RA, w);
-  Serial.print(w);
+ // Serial.print(w);
   // Do the same for the "twos" bit and then shift it over
   // to the "ones" position so it's a binary 1
   w = (row & B010) >> 1;
   digitalWrite(RB, w);
-  Serial.print(w);
+ // Serial.print(w);
   // And again for the "fours" bit, remembering to shift it over
   w = (row & B100) >> 2;
   digitalWrite(RC, w);
-  Serial.print(w);
-  Serial.print("  ");
+ // Serial.print(w);
+  //Serial.print("  ");
   // Same as the above block but for the other mux
   // so go read it there. 
   w = col & B001;
   digitalWrite(CA, w);
-  Serial.print(w);
+ // Serial.print(w);
   w = (col & B010) >> 1;
   digitalWrite(CB, w);
-  Serial.print(w);
+//  Serial.print(w);
   w = (col & B100) >> 2;
   digitalWrite(CC, w);
-  Serial.print(w);
-  Serial.print("\n");
+//  Serial.print(w);
+  //Serial.print("\n");
   
   // Pull the enable pin low to make the connection
   // Also, flash the LED for good measure to show that 
