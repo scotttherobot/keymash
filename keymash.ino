@@ -17,6 +17,7 @@ int LED = 13;
 void touch(int row, int col);
 void mash();
 void printc(char c);
+void setCaps(boolean on);
 
 /////////////////////
 // Keymap
@@ -30,7 +31,8 @@ typedef struct{
 
 Letter let[64];
 
-
+// The status of the caps lock key
+boolean caps = false;
 
 
 
@@ -103,12 +105,7 @@ void setup(){
   let[54] = (Letter) {'3', 6, 6}; //
   //let[55] = (Letter) {'$', 6, 7}; // BEEP
   
-  // ASCII support for newline, carriage return
-  let[55] = (Letter) {10, 5, 4};
-  let[56] = (Letter) {13, 5, 4};
-  // ASCII/VT100 support for Delete
-  let[57] = (Letter) {127, 3, 7};
-  
+
  // Turn the LED on to show that setup is happening
  pinMode(LED, OUTPUT);
  digitalWrite(LED, LOW);
@@ -137,26 +134,38 @@ void setup(){
 }
 
 void loop(){
-//mash();
-char c;
-while(!Serial.available()){
-}
-c = Serial.read();
-printc(c);
+  //mash();
+  char c;
+  while(!Serial.available()){
+  }
+  c = Serial.read();
+  printc(c);
 }
 
 void printc(char c){
-  if(c>64 && c<91){
-     printc('~');
-     printc(c + 32);
-     printc('~');
-  }
-  else{
     switch(c){
+      // Let's make a special case for space so it's quick
+      case ' ':
+        Serial.print(c);
+        touch(1, 7);
+        break;
+      // 10 and 13 are carriage return
+      case 10:
+        Serial.print(c);
+        touch(5, 4);
+        break;
+      case 13:
+        Serial.print(c);
+        touch(5, 4);
+        break;
+      // 127 is delete.
+      case 127:
+        Serial.print(c);
+        touch(3, 7);
+        break;
       case ':':
-        printc('~');
-        printc(';');
-        printc('~');
+        setCaps(true);
+        touch(2, 0);
         break;
       case '"':
         printc('~');
@@ -214,9 +223,8 @@ void printc(char c){
         printc('~');
         break;
       case '#':
-        printc('~');
-        printc('3');
-        printc('~');
+        setCaps(true);
+        touch(6, 6);
         break;
       case '@':
         printc('~');
@@ -229,21 +237,38 @@ void printc(char c){
         printc('~');
         break;
       default:
+        // If the char is a capital letter,
+        // set the caps lock and remember that we did that
+        if(c>64 && c<91){
+          setCaps(true);
+          c = c + 32;
+        // If the character is NOT a capital, make sure caps isn't set
+        } else {
+          // If caps happens to be set, un-set it.
+          setCaps(false);
+        }
         int i;
         for(i=0; i < 64; i++){
-         if(let[i].c == c){
-          touch(let[i].row, let[i].col);
-          Serial.print(c);
-          break;
-         } 
+          if(let[i].c == c){
+            touch(let[i].row, let[i].col);
+            Serial.print(c);
+            break;
+          } 
         }
-  }
-      
-  }
+     }
+}
   
-  
-  
-  
+void setCaps(boolean on){
+   if(on && !caps){
+      touch(0, 5);
+      caps = true;
+      Serial.print("--CON--");
+   }
+   else if(!on && caps){
+      touch(0, 5);
+      caps = false;
+      Serial.print("--COFF--");
+   }
 }
 
 void touch(int row, int col){

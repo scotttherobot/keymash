@@ -10,7 +10,7 @@ def main(argv):
 	print 'BAUD RATE IS 1200!!'
 	f = open(argv[0])
 	print 'If the file is greater than 60 columns wide, there may be trouble.'
-	print 'Please press the inhibit button to prevent garbage being printed as the port opens.'
+	#print 'Please press the inhibit button to prevent garbage being printed as the port opens.'
 	print 'Print? [y/n]'
 	if raw_input("> ") == 'y':
 		# Open a serial port
@@ -21,20 +21,20 @@ def main(argv):
 		# ser.open()
 		if ser.isOpen():
 			print 'The port was opened successfully.'
-			mes = ser.readline()
-			print 'The printer says: ' + mes
-			print 'Print? [press any key]'
-			m = raw_input("> ")
+			#mes = ser.readline()
+			#print 'The printer says: ' + mes
+			#print 'Print? [press any key]'
+			#m = raw_input("> ")
 			for line in f:
+				print line
 				for char in line:
 					ser.write(char)
-					print char
-					time.sleep(.25)
-				ser.write('|')
-				print '\n'
-				time.sleep(2)
+					time.sleep(.15)
+				#ser.write('|')
+				#print '\n'
+				time.sleep(1.5)
 			ser.close()
-			if ser.isOpen() == false:
+			if !ser.isOpen():
 				print 'It appears the job is done. Goodbye.'
 		else:
 			print 'There was an error opening the port. Goodbye.'
