@@ -33,8 +33,9 @@ def main(argv):
 				#ser.write('|')
 				#print '\n'
 				time.sleep(1.5)
+			ser.write('|')
 			ser.close()
-			if !ser.isOpen():
+			if not ser.isOpen():
 				print 'It appears the job is done. Goodbye.'
 		else:
 			print 'There was an error opening the port. Goodbye.'
