@@ -7,7 +7,7 @@ def main(argv):
 	print ' --------------------------\n'
 	print 'The input file you have chosen is ' + argv[0] + '\n'
 	print 'The serial port you have chosen is ' + argv[1] + '\n'
-	print 'BAUD RATE IS 1200!!'
+	print 'BAUD RATE IS 9600!!'
 	f = open(argv[0])
 	print 'If the file is greater than 60 columns wide, there may be trouble.'
 	#print 'Please press the inhibit button to prevent garbage being printed as the port opens.'
@@ -16,7 +16,7 @@ def main(argv):
 		# Open a serial port
 		ser = serial.Serial(
 			port=argv[1],
-			baudrate=1200
+			baudrate=9600
 		)
 		# ser.open()
 		if ser.isOpen():
