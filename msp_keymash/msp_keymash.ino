@@ -1,17 +1,17 @@
 // The control lines for the first mux 
-int RA = 2;
-int RB = 3;
-int RC = 4;
+int RA = P1_5;
+int RB = P1_4;
+int RC = P1_3;
 // and the other one 
 // Notice these are flipped, for cosmetic reasons on the hardware.
 // I wanted the colors to line up nicely :)
-int CC = 5;
-int CB = 7;
-int CA = 6;
+int CA = P2_0;
+int CB = P2_1;
+int CC = P2_2;
 // and that one control line 
-int EN = 8;
+int EN = P2_5;
 // Okay, and the LED too 
-int LED = 13;
+int LED = P1_0;
 
 // here are some function prototypes 
 void touch(int row, int col);
@@ -108,10 +108,10 @@ void setup(){
 
  // Turn the LED on to show that setup is happening
  pinMode(LED, OUTPUT);
- digitalWrite(LED, LOW);
+ digitalWrite(LED, HIGH);
  // Setup the serial port to echo row/col as we mash
  // (get some serial up in here, up in here)
- Serial.begin(1200); 
+ Serial.begin(9600); 
  // and pull the enable pin high
  // to inhibit connections
  pinMode(EN, OUTPUT);
@@ -126,7 +126,17 @@ void setup(){
  pinMode(CC, OUTPUT);
  // turn the LED off to signal that everything's good.
  digitalWrite(LED, LOW);
- touch(0,0);
+ delay(100);
+ digitalWrite(LED, HIGH);
+ delay(100);
+ digitalWrite(LED, LOW);
+ delay(100);
+ digitalWrite(LED, HIGH);
+ delay(100);
+ digitalWrite(LED, LOW);
+ 
+ 
+ //touch(0,0);
  
  Serial.println("System ready.\n");
 
